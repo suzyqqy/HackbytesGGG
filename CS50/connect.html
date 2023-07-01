@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://fonts.googleapis.com/css2?family=Work+Sans&display=swap" rel="stylesheet">
+        <title>Private Chat</title>
+        <style>
+            * {
+                box-sizing:border-box;
+                margin:0;
+                padding:0;
+            }
+            body {
+                display:grid;
+                grid-template-rows: 64px auto 100px;
+                grid-template-columns: auto 600px auto;
+                width:100vw;
+                height:100vh;
+                overflow: hidden;
+                font-family: system-ui, san-serif;
+                background-color: #9be8a5;
+            }
+            header {
+                grid-column-start: 2;
+                grid-column-end: 3;
+                text-align:center;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                background-color: #2e2e30;
+                color: #9be8a5;
+            }
+            header > h1 {
+                font-family: 'Work Sans', cursive;
+                font-size: 2em;
+            }
+            main {
+                grid-column-start: 2;
+                grid-column-end: 3;
+                list-style:none;
+                padding: 24px;
+                display:flex;
+                flex-direction:column;
+                align-items:center;
+                justify-content:flex-start;	
+                background-color: white;
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+            main > div {
+                width: 100%;
+                font-size: 18px;
+                margin: 8px 0;
+            }
+            main > div.me {
+                font-family: 'Work Sans', cursive;
+                text-align: right;
+            }
+            main > div.you {
+                font-family: 'Work Sans', monospace;
+                text-align:left;
+            }
+            footer {
+                grid-column-start: 2;
+                grid-column-end: 3;
+                display:grid;
+                grid-template-columns: auto 80px;
+                background-color: #9be8a5;
+            }
+            footer > textarea {
+                font-family: 'Work Sans', cursive;
+                font-size: 18px;
+                padding: 8px 16px;
+                resize: none;
+            }
+            footer > button {
+                font-family: 'Work Sans', cursive;
+                font-size: 20px;
+                background-color: #9be8a5;
+            }
+            @media only screen and (max-width: 768px) {
+                body {
+                    height: calc(100vh - 114px);
+                    grid-template-columns: auto 100% auto;
+                }
+            }
+        </style>
+		<script src='/libs/socketio.js'></script>
+		<script type='module'>
+			// GET THE PERSON'S NAME
+			
+			let name = localStorage.getItem('name');
+			if(!name) {
+				name = prompt("What is your name?")
+				localStorage.setItem('name', name);
+			}
+			
+			
+			// REGISTER COMMUNICATIONS
+			const socket = io('/tunnel');
+			async function initializeSockets() {
+				const res = await fetch('/tunnel/register', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						events: ['chat']
+					})
+				});
+				
+				const resp = await res.json();
+			
+				if(resp.error) return alert(resp.error)
+				
+			
+				socket.on('chatresponse', function(data) {
+					const div = document.createElement('div');
+					div.className = 'you';
+					div.innerHTML = `<b>${data.data.name}:</b> <span>${data.data.text}</span>`;
+					$main.appendChild(div);
+					$main.scrollTo(0,$main.scrollHeight);
+				});
+				
+				socket.on('userconnected', (socketId) => {
+					console.log('userconnected: ' + socketId);
+				});
+				
+				socket.on('userdisconnected', (socketId) => {
+					console.log('disconnected: ' + socketId);
+				})
+	
+			}
+			initializeSockets();
+			
+			// SENDING CHAT MESSAGE
+			const $button = document.querySelector('button');
+			const $textarea = document.querySelector('textarea');
+			const $main = document.querySelector('main');
+			
+			function sendMessage() {
+				socket.emit('chat', {name, text: $textarea.value});
+				
+				const div = document.createElement('div');
+				div.className = 'me';
+				div.innerHTML = `<b>${name}:</b> <span>${$textarea.value}</span>`;
+				$main.appendChild(div);
+				$textarea.value = '';
+				$main.scrollTo(0,$main.scrollHeight);
+			}
+
+			$button.addEventListener('click', sendMessage);
+			$textarea.focus();
+		</script>
+	</head>
+	<body>
+		<header>
+			<h1>🔒 Private Chat </h1>
+		</header>
+		<main>
+			<div class='you'>Welcome!</div>
+			<div class='me'></div>
+		</main>
+		<footer>
+			<textarea placeholder='Type your message here...'></textarea>
+			<button>Send</button>
+		</footer>
+	</body>
+</html>

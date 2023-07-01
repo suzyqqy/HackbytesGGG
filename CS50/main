@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="homepage.css"
+        
+    </head>
+    <body>
+        <h1>Guerilla Gardening Guru</h1>
+        <br>
+        Welcome! This is your all-in-one platform to find everything you need to know to start guerilla gardening!
+        <br>
+        Guerilla gardening is a fun, achievable and positive way to make our local areas more green. It involves:
+        <br>
+        <h2>1. Finding the best plants to nurture for your local climate.</h2>
+        You need plants that will cooperate with preexisting flora and fauna. Ideally, also ones that produce a large amount of oxygen!
+        <br>
+        <h2>2. Finding the perfect location.</h2>
+        Scout out your area for some prime fixer-upper dirt areas. Think roundabouts with half-dead grass, banks between the pavement and the road, unused flower pots in your town centre.
+    </body>
+</html>

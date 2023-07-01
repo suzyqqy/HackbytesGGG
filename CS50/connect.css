@@ -1,0 +1,86 @@
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://fonts.googleapis.com/css2?family=Inconsolata&family=Fredericka+the+Great&family=Mali&display=swap" rel="stylesheet">
+	<title>Private Chat</title>
+	<style>
+		* {
+			box-sizing:border-box;
+			margin:0;
+			padding:0;
+		}
+		body {
+			display:grid;
+			grid-template-rows: 64px auto 100px;
+			grid-template-columns: auto 600px auto;
+			width:100vw;
+			height:100vh;
+			overflow: hidden;
+			font-family: system-ui, san-serif;
+			background-color: #fcd411;
+		}
+		header {
+			grid-column-start: 2;
+			grid-column-end: 3;
+			text-align:center;
+			display:flex;
+			align-items:center;
+			justify-content:center;
+			background-color: #2e2e30;
+			color: #fcd411;
+		}
+		header > h1 {
+			font-family: 'Fredericka the Great', cursive;
+			font-size: 2em;
+		}
+		main {
+			grid-column-start: 2;
+			grid-column-end: 3;
+			list-style:none;
+			padding: 24px;
+			display:flex;
+			flex-direction:column;
+			align-items:center;
+			justify-content:flex-start;	
+			background-color: white;
+			overflow-y: auto;
+			overflow-x: hidden;
+		}
+		main > div {
+			width: 100%;
+			font-size: 18px;
+			margin: 8px 0;
+		}
+		main > div.me {
+			font-family: 'Mali', cursive;
+			text-align: right;
+		}
+		main > div.you {
+			font-family: 'Inconsolata', monospace;
+			text-align:left;
+		}
+		footer {
+			grid-column-start: 2;
+			grid-column-end: 3;
+			display:grid;
+			grid-template-columns: auto 80px;
+			background-color: #fcd411;
+		}
+		footer > textarea {
+			font-family: 'Mali', cursive;
+			font-size: 18px;
+			padding: 8px 16px;
+			resize: none;
+		}
+		footer > button {
+			font-family: 'Fredericka the Great', cursive;
+			font-size: 20px;
+			background-color: #fcd411;
+		}
+		@media only screen and (max-width: 768px) {
+			body {
+				height: calc(100vh - 114px);
+				grid-template-columns: auto 100% auto;
+			}
+		}
+	</style>
+</head>
